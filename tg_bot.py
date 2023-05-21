@@ -8,6 +8,7 @@ import asyncio
 import sqlite3
 
 
+
 # Запускаем логгирование
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG
@@ -67,9 +68,10 @@ async def start(update, context):
     user = update.effective_user
     await update.message.reply_html(
         rf"{user.mention_html()}! Здраствуйте! Я ваш личный бот, который будет показывать самые свежие новости"
-        rf"от 'playground.ru'",
+        rf" от 'playground.ru'",
         reply_markup=markup)
     await update.message.reply_text("Что бы выбрать интерес нажмите кнопку - interests")
+    asyncio.create_task(news(update, context))
 
 
 # Команда помощи, кратко обьясняющая о боте.
@@ -80,6 +82,7 @@ async def help_command(update, context):
     await update.message.reply_text("Что бы приостановить бота нажмите - stop")
     await update.message.reply_text("Что бы узнать время нажмите - time")
     await update.message.reply_text("Что бы узнать дату нажмите - date")
+    await update.message.reply_text("По всем вопросам обращаться к @tot_samiy_na_bezdare")
 
 
 # Функция показывающая время.
@@ -137,7 +140,7 @@ async def interest(update, context):
     cur.execute(f"""UPDATE people SET perm = 'TRUE'
             WHERE people_id = {str(user_id)}""")
     con.commit()
-    con.close()
+    con.close() 
     return ConversationHandler.END
 
 
